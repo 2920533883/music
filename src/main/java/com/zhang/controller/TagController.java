@@ -1,5 +1,6 @@
 package com.zhang.controller;
 
+import com.zhang.bean.AuthConstant;
 import com.zhang.bean.R;
 import com.zhang.bean.Tag;
 import com.zhang.service.TagService;
@@ -22,11 +23,11 @@ public class TagController {
 
     /**
      * 获取所有分类标签
-     * @return
+     * @return R
      */
     @GetMapping("/tag")
     public R getAllTags(){
         Map<String, List<Tag>> allTag = tagService.getAllTag();
-        return new R(200, "获取成功！", allTag);
+        return new R(200, AuthConstant.SUCCESS, allTag);
     }
 }
