@@ -1,0 +1,29 @@
+server:
+  port: 8888
+
+spring:
+  datasource:
+    url: jdbc:mysql://121.4.83.13:3306/zs_music?useUnicode=true&serverTimezone=UTC&characterEncoding=utf-8
+    username: root
+    password: (zrf666)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    accessKeyId: LTAI5t8HBhtcKTZRNWaekfZn
+    accessKeySecret: j0UoH7YfZmW5fzcy6LKp3lvM3V2txB
+    bucketName: zsmusic
+
+jwt:
+  auth: false
+
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+  type-handlers-package: com.zhang.handler
+
+
