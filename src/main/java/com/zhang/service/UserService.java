@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
@@ -95,6 +92,8 @@ public class UserService {
         User checkUser = userMapper.selectUserByUsername(user.getUsername());
         if (checkUser == null) { //用户名未注册
             user.setPassword(SecurityUtil.getSHA256(user.getPassword()));
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            user.setCreate_time(sdf.format(new Date()));
             userMapper.insertUser(user);
             response = new R(200, AuthConstant.SUCCESS, user);
         } else {

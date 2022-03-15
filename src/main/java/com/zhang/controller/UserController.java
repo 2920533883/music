@@ -67,7 +67,6 @@ public class UserController {
      * @param token Token
      * @return R
      */
-    @RequiresPermissions("user:select")
     @GetMapping("/usert")
     public R getUserByToken(@RequestParam("token") String token) {
         return new R(200, "获取成功！", userService.selectUserByToken(token));
@@ -79,7 +78,6 @@ public class UserController {
      * @param username 用户名
      * @return R
      */
-//    @RequiresPermissions("user:select")
     @GetMapping("/useru")
     public R getUserByUsername(@RequestParam("username") String username) {
         User user = userService.selectUserByUsername(username);
@@ -102,7 +100,6 @@ public class UserController {
      *
      * @return R
      */
-    @RequiresPermissions("user:select")
     @GetMapping("/user/all")
     public R getAllUser() {
         return new R(200, "获取成功！", userService.selectAllUser());

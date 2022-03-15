@@ -38,4 +38,12 @@ public interface UserMapper {
     @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, #{profession}, #{create_time}, #{icon_url}, #{love_song}, #{love_tag}, #{following}, #{follower}, #{birthday}, #{address}, #{gender})"})
     void insertUser(User user);
 
+    // 获取收藏歌曲
+    @Select("select love_song from user where user_id = #{user_id}")
+    String getLoveSongByUserId(Integer user_id);
+
+
+    // 更新收藏歌曲
+    @Update("update user set love_song = #{love_song} where user_id = #{user_id}")
+    void updateLoveSongByUserId(Integer user_id, String love_song);
 }
