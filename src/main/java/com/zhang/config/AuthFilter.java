@@ -20,7 +20,7 @@ public class AuthFilter extends AuthenticatingFilter {
 
     @Override
     public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-        if (((HttpServletRequest)request).getMethod().equals("OPTIONS")){
+        if (((HttpServletRequest) request).getMethod().equals("OPTIONS")) {
             return true;
         }
         return super.onPreHandle(request, response, mappedValue);
@@ -31,18 +31,11 @@ public class AuthFilter extends AuthenticatingFilter {
         return null;
     }
 
-    /**
-     * 在这里拦截所有请求
-     * @param request
-     * @param response
-     * @param mappedValue
-     * @return
-     */
     @SneakyThrows
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        String token = JwtUtil.getRequestToken((HttpServletRequest)request);
-        if (!StringUtil.isBlank(token)){
+        String token = JwtUtil.getRequestToken((HttpServletRequest) request);
+        if (!StringUtil.isBlank(token)) {
             try {
                 return this.executeLogin(request, response);
             } catch (Exception e) {
@@ -56,29 +49,16 @@ public class AuthFilter extends AuthenticatingFilter {
         }
     }
 
-    /**
-     * 请求失败拦截,请求终止，不进行转发直接返回客户端拦截结果
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception{
-        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.sendError(403, AuthConstant.AUTHENTICATE_FAIL);
         return false;
     }
 
-    /**
-     * 用户存在，执行登录认证
-     * @param request
-     * @param response
-     * @return
-     */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) {
-        String token = JwtUtil.getRequestToken((HttpServletRequest)request);
+        String token = JwtUtil.getRequestToken((HttpServletRequest) request);
         AuthToken jwtToken = new AuthToken(token);
         // 提交给AuthRealm进行登录认证
         getSubject(request, response).login(jwtToken);
