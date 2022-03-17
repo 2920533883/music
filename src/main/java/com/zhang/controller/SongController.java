@@ -68,4 +68,36 @@ public class SongController {
         songService.loveSong(userId, songId);
         return new R(200, AuthConstant.SUCCESS, null);
     }
+
+    /**
+     * 获取用户收藏歌曲
+     * @param userId 用户ID
+     * @return R
+     */
+    @GetMapping("/loveSong/{userId}")
+    public R getLoveSong(@PathVariable Integer userId){
+        return new R(200, AuthConstant.SUCCESS, songService.getLoveSong(userId));
+    }
+
+    /**
+     * 取消收藏歌曲
+     * @param userId 用户ID
+     * @param songId 歌曲ID
+     * @return R
+     */
+    @DeleteMapping("/loveSong/{userId}/{songId}")
+    public R getLoveSong(@PathVariable Integer userId, @PathVariable String songId){
+        songService.deleteLoveSong(userId, songId);
+        return new R(200, AuthConstant.SUCCESS, null);
+    }
+
+    /**
+     * 获取专辑里的歌曲
+     * @param albumId 专辑ID
+     * @return R
+     */
+    @GetMapping("/song/album/{albumId}")
+    public R getAlbumSong(@PathVariable Integer albumId){
+        return new R(200, AuthConstant.SUCCESS,songService.getSongByAlbum(albumId));
+    }
 }

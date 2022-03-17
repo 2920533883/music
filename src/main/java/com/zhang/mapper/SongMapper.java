@@ -20,4 +20,7 @@ public interface SongMapper {
 
     @Select({"select * from song where song_name like #{song_name} limit #{start}, #{offset}"})
     List<Song> getOnePageSongByName(Integer start, Integer offset, String song_name);
+
+    @Select({"select * from song where song_id = #{song_id}"})
+    Song getSongById(Integer song_id);
 }
