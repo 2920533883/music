@@ -138,4 +138,5 @@ public class UserController {
     public R updateIconById(@RequestParam("file") MultipartFile file, @PathVariable String id) throws IOException {
         return new R(200, AuthConstant.SUCCESS, userService.uploadIcon(file, id));
     }
+
 }
