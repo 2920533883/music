@@ -18,13 +18,16 @@ import java.util.List;
 public class Song implements Serializable {
     Integer song_id;
     String song_name;
-    String song_url;
+    @TableField(typeHandler = List2VarcharHandler.class)
+    List<String> singer_name;
     Integer song_time;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> singer_list;
+    List<String> album_name;
     Integer album_id;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> song_tag;
+    String song_img;
     Integer play_num;
     Integer share_num;
     Integer love_num;

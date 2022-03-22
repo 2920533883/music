@@ -25,7 +25,7 @@ public class SingerController {
      * @return R
      */
     @GetMapping("/singer/all")
-    public R getAllSong(@RequestParam Integer start, @RequestParam Integer offset){
+    public R getAllSinger(@RequestParam Integer start, @RequestParam Integer offset){
         return new R(200, AuthConstant.SUCCESS,singerService.getSinger(start, offset));
     }
 
@@ -37,7 +37,7 @@ public class SingerController {
      * @return R
      */
     @GetMapping("/singer/py/{f_py}")
-    public R getSongByFPY(@PathVariable String f_py, @RequestParam Integer start, @RequestParam Integer offset){
+    public R getSingerByFPY(@PathVariable String f_py, @RequestParam Integer start, @RequestParam Integer offset){
         return new R(200, AuthConstant.SUCCESS, singerService.getSingerByPinYin(f_py, start, offset));
     }
 
@@ -48,8 +48,18 @@ public class SingerController {
      * @param offset 每页数量
      * @return R
      */
-    @GetMapping("/singer/name/{name}")
-    public R getSongByName(@PathVariable String name, @RequestParam Integer start, @RequestParam Integer offset){
+    @GetMapping("/singer/search/{name}")
+    public R getSingerByName(@PathVariable String name, @RequestParam Integer start, @RequestParam Integer offset){
         return  new R(200, AuthConstant.SUCCESS, singerService.getSingerByNameFuzzily(name, start, offset));
+    }
+
+    /**
+     * 获取歌手细节
+     * @param singer_id 歌手ID
+     * @return R
+     */
+    @GetMapping("/singer/detail/{singer_id}")
+    public R getSingerDetail(@PathVariable Integer singer_id){
+        return new R(200, AuthConstant.SUCCESS, singerService.getSingerDetail(singer_id));
     }
 }

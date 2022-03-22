@@ -15,7 +15,7 @@ public class LyricController {
     LyricService lyricService;
 
     /**
-     * 获取歌曲台词
+     * 获取歌曲歌词
      * @param song_id 歌曲ID
      * @return R
      */

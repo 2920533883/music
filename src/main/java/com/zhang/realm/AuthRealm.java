@@ -1,4 +1,4 @@
-package com.zhang.Realm;
+package com.zhang.realm;
 
 import com.zhang.bean.*;
 import com.zhang.service.UserService;

@@ -1,6 +1,6 @@
 package com.zhang.config;
 
-import com.zhang.Realm.AuthRealm;
+import com.zhang.realm.AuthRealm;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
