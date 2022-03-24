@@ -30,8 +30,8 @@ public class SingerService {
         return singerMapper.getOnePageSinger(start, offset);
     }
 
-    public List<Singer> getSingerByPinYin(String f_py, Integer start, Integer offset){
-        return singerMapper.getOnePageSingerByPinYin(f_py, start, offset);
+    public List<Singer> getSingerByPinYin(String f_py){
+        return singerMapper.getOnePageSingerByPinYin(f_py);
     }
 
     public List<Singer> getSingerByNameFuzzily(String singer_name, Integer start, Integer offset){

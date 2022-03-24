@@ -11,13 +11,13 @@ import java.util.List;
 @Mapper
 public interface SingerMapper {
     @Select("select * from singer limit #{start}, #{offset}")
-    public List<Singer> getOnePageSinger(Integer start, Integer offset);
-    @Select("select * from singer where f_py = #{f_py} limit #{start}, #{offset}")
-    public List<Singer> getOnePageSingerByPinYin(String f_py, Integer start, Integer offset);
+    List<Singer> getOnePageSinger(Integer start, Integer offset);
+    @Select("select * from singer where f_py = #{f_py}")
+    List<Singer> getOnePageSingerByPinYin(String f_py);
 
     @Select("select * from singer where singer_name like #{singer_name} limit #{start}, #{offset}")
-    public List<Singer> getOnePageSingerByNameFuzzily(String singer_name, Integer start, Integer offset);
+    List<Singer> getOnePageSingerByNameFuzzily(String singer_name, Integer start, Integer offset);
 
     @Select("select * from singer where singer_id = #{singer_id}")
-    public Singer getSingerById(Integer singer_id);
+    Singer getSingerById(Integer singer_id);
 }

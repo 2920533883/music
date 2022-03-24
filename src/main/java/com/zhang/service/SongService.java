@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -34,8 +32,13 @@ public class SongService {
         return songMapper.getOnePageSong(start, offset);
     }
 
-    public List<Song> getOnePageSongByTag(Integer start, Integer offset, String tag){
-        return songMapper.getOnePageSongByTag(start, offset, "%"+tag+"%");
+    public Map<String, Object> getOnePageSongByTag(Integer start, Integer offset, String tag){
+        Map<String, Object> res = new HashMap<>();
+        List<Song> songList = songMapper.getOnePageSongByTag(start*offset, offset, "%" + tag + "%");
+        int total = songMapper.getSongByTagTotal("%" + tag + "%");
+        res.put("song", songList);
+        res.put("total", total);
+        return res;
     }
 
     public List<Song> getOnePageSongByName(Integer start, Integer offset, String name){
@@ -55,7 +58,6 @@ public class SongService {
         JSONArray array = JSON.parseArray(loveSong);
         for (Object o : array) {
             Song song = songMapper.getSongById(Integer.valueOf(o.toString()));
-
             songList.add(song);
         }
         return songList;

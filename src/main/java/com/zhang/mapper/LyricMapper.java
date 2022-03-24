@@ -11,4 +11,5 @@ public interface LyricMapper {
 
     @Select("select * from lyric where song_id = #{song_id}")
     Lyric getLyricBySongId(Integer song_id);
+
 }

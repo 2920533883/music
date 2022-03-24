@@ -27,7 +27,6 @@ public class TagController {
      */
     @GetMapping("/tag")
     public R getAllTags(){
-        Map<String, List<Tag>> allTag = tagService.getAllTag();
-        return new R(200, AuthConstant.SUCCESS, allTag);
+        return new R(200, AuthConstant.SUCCESS, tagService.getAllTag());
     }
 }

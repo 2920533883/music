@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,24 @@ import java.util.Map;
 public class TagService {
     @Resource
     TagMapper tagMapper;
-    public Map<String, List<Tag>> getAllTag(){
-        HashMap<String, List<Tag>> res = new HashMap<>();
-        List<Tag> allFatherTag = tagMapper.getTagsByFid(0);
-        allFatherTag.forEach(tag -> {
-            res.put(tag.getTag_name(), tagMapper.getTagsByFid(tag.getTag_id()));
+
+    public ArrayList<HashMap<String, Object>> getAllTag() {
+        ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+        List<Tag> fTagList = tagMapper.getTagsByFid(0);
+        fTagList.forEach(fTag -> {
+            List<Tag> cTagList = tagMapper.getTagsByFid(fTag.getTag_id());
+            ArrayList<HashMap<String, Object>> children = new ArrayList<>();
+            cTagList.forEach(cTag -> {
+                HashMap<String, Object> cMap = new HashMap<>();
+                cMap.put("value", cTag.getTag_name());
+                cMap.put("label", cTag.getTag_name());
+                children.add(cMap);
+            });
+            HashMap<String, Object> fMap = new HashMap<>();
+            fMap.put("value", fTag.getTag_name());
+            fMap.put("label", fTag.getTag_name());
+            fMap.put("children", children);
+            res.add(fMap);
         });
         return res;
     }

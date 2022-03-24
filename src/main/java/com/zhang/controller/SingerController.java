@@ -32,13 +32,11 @@ public class SingerController {
     /**
      * 按首字母查询歌手
      * @param f_py 拼音首字母
-     * @param start 页数
-     * @param offset 每页数量
      * @return R
      */
     @GetMapping("/singer/py/{f_py}")
-    public R getSingerByFPY(@PathVariable String f_py, @RequestParam Integer start, @RequestParam Integer offset){
-        return new R(200, AuthConstant.SUCCESS, singerService.getSingerByPinYin(f_py, start, offset));
+    public R getSingerByFPY(@PathVariable String f_py){
+        return new R(200, AuthConstant.SUCCESS, singerService.getSingerByPinYin(f_py));
     }
 
     /**

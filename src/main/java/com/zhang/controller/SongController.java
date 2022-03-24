@@ -40,8 +40,7 @@ public class SongController {
      */
     @GetMapping("/songByTag/{tag}")
     public R getOnePageSongByTag(@PathVariable String tag, @RequestParam Integer start, @RequestParam Integer offset){
-        List<Song> SongList = songService.getOnePageSongByTag(start, offset, tag);
-        return new R(200, AuthConstant.SUCCESS, SongList);
+        return new R(200, AuthConstant.SUCCESS, songService.getOnePageSongByTag(start, offset, tag));
     }
 
     /**
