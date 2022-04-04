@@ -85,6 +85,18 @@ public class UserController {
     }
 
     /**
+     * 根据用户ID获取用户信息
+     *
+     * @param id 用户ID
+     * @return R
+     */
+    @GetMapping("/useri")
+    public R getUserByID(@RequestParam("id") String id) {
+        return new R(200, "获取成功！",userService.selectUserByID(id));
+    }
+
+
+    /**
      * 按昵称模糊搜索
      *
      * @param name 用户名

@@ -3,6 +3,7 @@ package com.zhang.service;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.zhang.bean.*;
+import com.zhang.mapper.TagMapper;
 import com.zhang.mapper.UserMapper;
 import com.zhang.util.JwtUtil;
 import com.zhang.util.SecurityUtil;
@@ -25,6 +26,9 @@ import java.util.*;
 public class UserService {
     @Resource
     UserMapper userMapper;
+
+    @Resource
+    TagMapper tagMapper;
     @Value("${aliyun.oss.endpoint}")
     private String ALIYUN_OSS_ENDPOINT;
     @Value("${aliyun.oss.accessKeyId}")
@@ -69,6 +73,35 @@ public class UserService {
     public User selectUserByUsername(String username) {
         return userMapper.selectUserByUsername(username);
     }
+
+    public Map<String, Object> selectUserByID(String id) {
+        Map<String, Object> res = new HashMap<>();
+        User user = userMapper.selectUserByID(id);
+        List<String> followerList = user.getFollower();
+        List<User> resFollower = new ArrayList<>();
+        followerList.forEach(follower->{
+            User simpleInfo = userMapper.getSimpleInfo(follower);
+            resFollower.add(simpleInfo);
+        });
+        List<String> followingList = user.getFollowing();
+        List<User> resFollowing = new ArrayList<>();
+        followingList.forEach(following->{
+            User simpleInfo = userMapper.getSimpleInfo(following);
+            resFollowing.add(simpleInfo);
+        });
+        List<String> tagList = user.getLove_tag();
+        List<Tag> resTag = new ArrayList<>();
+        tagList.forEach(tag->{
+            Tag tagByID = tagMapper.getTagsByID(tag);
+            resTag.add(tagByID);
+        });
+        res.put("user", user);
+        res.put("follower", resFollower);
+        res.put("following", resFollowing);
+        res.put("loveTag", resTag);
+        return res;
+    }
+
     public List<User> selectUserByNameFuzzily(String name) {
         return userMapper.selectUserByNameFuzzily("%"+name+"%");
     }
@@ -93,6 +126,7 @@ public class UserService {
             user.setPassword(SecurityUtil.getSHA256(user.getPassword()));
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             user.setCreate_time(sdf.format(new Date()));
+            user.setIcon_url("https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png");
             userMapper.insertUser(user);
             response = new R(200, AuthConstant.SUCCESS, user);
         } else {
@@ -106,7 +140,6 @@ public class UserService {
     }
     public R login(User user, ServletResponse response) {
         R resp;
-        Map<String, Object> res = new HashMap<>();
         User checkUser = userMapper.selectUserByUsername(user.getUsername());
         if (checkUser != null) { // 用户存在
             if (SecurityUtil.getSHA256(user.getPassword()).equals(checkUser.getPassword())) {
@@ -115,7 +148,8 @@ public class UserService {
                 expireTime.setTime(setTime.getTime() + AuthConstant.EXPIRE_TIME);
                 String token = JwtUtil.sign(checkUser, expireTime);
                 JwtUtil.editCookieToken(response, token);
-                resp = new R(200, AuthConstant.SUCCESS, res);
+                User simpleInfo = userMapper.getSimpleInfo(checkUser.getUser_id().toString());
+                resp = new R(200, AuthConstant.SUCCESS, simpleInfo);
             } else {
                 resp = new R(400, AuthConstant.WRONG_PASSWORD, null);
             }

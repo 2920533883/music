@@ -25,6 +25,11 @@ public interface UserMapper {
     @Select({"SELECT * FROM `user` WHERE `username` = #{username}"})
     User selectUserByUsername(String username);
 
+    // 按用户ID精确查询用户
+    @Select({"SELECT * FROM `user` WHERE `user_id` = #{user_id}"})
+    User selectUserByID(String user_id);
+
+
     // 按昵称模糊查询用户
     @Select({"SELECT * FROM `user` WHERE `name` like #{name}"})
     List<User> selectUserByNameFuzzily(String name);
@@ -34,14 +39,17 @@ public interface UserMapper {
     List<User> selectAllUser();
 
     // 插入用户
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, #{profession}, #{create_time}, #{icon_url}, #{love_song}, #{love_tag}, #{following}, #{follower}, #{birthday}, #{address}, #{gender})"})
+    @Options(useGeneratedKeys = true, keyProperty = "user_id", keyColumn = "user_id")
+    @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, #{profession}, #{create_time}, #{icon_url}, #{love_song}, #{love_tag}, #{following}, #{follower}, #{birthday}, #{address}, #{gender}, #{play_history})"})
     void insertUser(User user);
 
-    // 获取收藏歌曲
+    // 获取用户收藏歌曲
     @Select("select love_song from user where user_id = #{user_id}")
     String getLoveSongByUserId(Integer user_id);
 
+    // 获取用户简易信息
+    @Select("select user_id, name, icon_url from user where user_id = #{user_id}")
+    User getSimpleInfo(String user_id);
 
     // 更新收藏歌曲
     @Update("update user set love_song = #{love_song} where user_id = #{user_id}")

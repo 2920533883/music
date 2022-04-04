@@ -36,4 +36,6 @@ public class User implements Serializable {
     List<String> following;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> follower;
+    @TableField(typeHandler = List2VarcharHandler.class)
+    List<String> play_history;
 }
