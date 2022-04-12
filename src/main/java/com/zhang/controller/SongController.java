@@ -4,9 +4,7 @@ import com.zhang.bean.AuthConstant;
 import com.zhang.bean.R;
 import com.zhang.bean.Song;
 import com.zhang.service.SongService;
-import com.zhang.service.UserService;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -58,14 +56,14 @@ public class SongController {
 
     /**
      * 收藏歌曲
-     * @param userId 用户ID
-     * @param songId 歌曲ID
+     * @param user_id 用户ID
+     * @param song_id 歌曲ID
      * @return R
      */
-    @PutMapping("/loveSong/{userId}/{songId}")
-    public R loveSong(@PathVariable Integer userId, @PathVariable String songId){
-        songService.loveSong(userId, songId);
-        return new R(200, AuthConstant.SUCCESS, null);
+    @PutMapping("/loveSong")
+    public R loveSong(@RequestParam("user_id") Integer user_id, @RequestParam("song_id") Integer song_id){
+        if (songService.loveSong(user_id, song_id)) return new R(200, AuthConstant.SUCCESS, null);
+        else return new R(400, AuthConstant.ERROR, null);
     }
 
     /**
@@ -74,8 +72,8 @@ public class SongController {
      * @return R
      */
     @GetMapping("/loveSong/{userId}")
-    public R getLoveSong(@PathVariable Integer userId){
-        return new R(200, AuthConstant.SUCCESS, songService.getLoveSong(userId));
+    public R getLoveSong(@PathVariable Integer userId, @RequestParam Integer start, @RequestParam Integer offset){
+        return new R(200, AuthConstant.SUCCESS, songService.getLoveSong(userId, start, offset));
     }
 
     /**
@@ -85,7 +83,7 @@ public class SongController {
      * @return R
      */
     @DeleteMapping("/loveSong/{userId}/{songId}")
-    public R getLoveSong(@PathVariable Integer userId, @PathVariable String songId){
+    public R getLoveSong(@PathVariable Integer userId, @PathVariable Integer songId){
         songService.deleteLoveSong(userId, songId);
         return new R(200, AuthConstant.SUCCESS, null);
     }
@@ -98,5 +96,16 @@ public class SongController {
     @GetMapping("/song/album/{albumId}")
     public R getAlbumSong(@PathVariable Integer albumId){
         return new R(200, AuthConstant.SUCCESS,songService.getSongByAlbum(albumId));
+    }
+
+    @GetMapping("/playHistory/{user_id}")
+    public R getPlayHistory(@PathVariable Integer user_id) {
+        return new R(200, AuthConstant.SUCCESS, songService.getPlayHistory(user_id));
+    }
+
+    @PutMapping("/playHistory")
+    public R addHistory(@RequestParam("user_id") Integer user_id, @RequestParam("song_id") Integer song_id) {
+        songService.updatePlayHistory(user_id, song_id);
+        return new R(200, AuthConstant.SUCCESS, null);
     }
 }

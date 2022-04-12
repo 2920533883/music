@@ -13,7 +13,7 @@ public interface UserMapper {
     void updateIcon(String icon_url, String user_id);
 
     // 更新用户信息
-    @Update({"update user set username=#{username}, birthday=#{birthday},address=#{address}, gender=#{gender} where user_id=#{user_id}"})
+    @Update({"update user set name=#{name}, profession=#{profession}, birthday=#{birthday}, gender=#{gender} where user_id=#{user_id}"})
     void updateUserInfo(User user);
 
     // 更新密码
@@ -40,7 +40,7 @@ public interface UserMapper {
 
     // 插入用户
     @Options(useGeneratedKeys = true, keyProperty = "user_id", keyColumn = "user_id")
-    @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, #{profession}, #{create_time}, #{icon_url}, #{love_song}, #{love_tag}, #{following}, #{follower}, #{birthday}, #{address}, #{gender}, #{play_history})"})
+    @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, null, #{create_time}, 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png', '[]', '[]', '[]', '[]', null, -1, '[]')"})
     void insertUser(User user);
 
     // 获取用户收藏歌曲
@@ -49,7 +49,7 @@ public interface UserMapper {
 
     // 获取用户简易信息
     @Select("select user_id, name, icon_url from user where user_id = #{user_id}")
-    User getSimpleInfo(String user_id);
+    User getSimpleInfo(Integer user_id);
 
     // 更新收藏歌曲
     @Update("update user set love_song = #{love_song} where user_id = #{user_id}")

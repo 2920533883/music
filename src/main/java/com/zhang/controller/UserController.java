@@ -5,7 +5,6 @@ import com.zhang.bean.AuthConstant;
 import com.zhang.bean.R;
 import com.zhang.bean.User;
 import com.zhang.service.UserService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,7 +91,7 @@ public class UserController {
      */
     @GetMapping("/useri")
     public R getUserByID(@RequestParam("id") String id) {
-        return new R(200, "获取成功！",userService.selectUserByID(id));
+        return new R(200, "获取成功！", userService.selectUserByID(id));
     }
 
 
@@ -119,6 +118,7 @@ public class UserController {
 
     /**
      * 按ID更新用户信息
+     *
      * @param user 用户信息
      * @return R
      */
@@ -143,6 +143,7 @@ public class UserController {
 
     /**
      * 更新用户头像
+     *
      * @param id 用户ID
      * @return R
      */
@@ -150,5 +151,4 @@ public class UserController {
     public R updateIconById(@RequestParam("file") MultipartFile file, @PathVariable String id) throws IOException {
         return new R(200, AuthConstant.SUCCESS, userService.uploadIcon(file, id));
     }
-
 }

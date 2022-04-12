@@ -39,20 +39,15 @@ public class AlbumService {
         Map<String,Object> res = new HashMap<>();
         Album album = albumMapper.getAlbumById(album_id);
         JSONArray array = JSON.parseArray(album.getSinger_list());
-        List<Song> songList = new ArrayList<>();
-        List<Singer> singerList = new ArrayList<>();
+        List<Singer> resSingerList = new ArrayList<>();
         for (Object o : array) {
             Singer singer = singerMapper.getSingerById(Integer.parseInt(o.toString()));
-            singerList.add(singer);
+            resSingerList.add(singer);
         }
-        array = JSON.parseArray(album.getSong_list());
-        for (Object o : array) {
-            Song song = songMapper.getSongById(Integer.parseInt(o.toString()));
-            songList.add(song);
-        }
+        List<Song> resSongList = songMapper.getSongByAlbumId(album_id);
         res.put("album", album);
-        res.put("singer", singerList);
-        res.put("song", songList);
+        res.put("singer", resSingerList);
+        res.put("song", resSongList);
         return res;
     }
 }

@@ -27,8 +27,6 @@ public class Song implements Serializable {
     Integer album_id;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> song_tag;
-    String song_img;
     Integer play_num;
-    Integer share_num;
     Integer love_num;
 }

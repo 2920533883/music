@@ -18,6 +18,8 @@ public class AuthConstant {
     //登录认证结果,返回给前端
     public final static String SUCCESS = "操作成功！";
 
+    public final static String ERROR = "操作失败！";
+
     public final static String UNKNOWN_ACCOUNT = "用户不存在。";
 
     public final static String ALREADY_REG = "此用户名已被注册！";

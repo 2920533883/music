@@ -10,8 +10,10 @@ import java.util.List;
 @CacheNamespace
 @Mapper
 public interface SingerMapper {
+
     @Select("select * from singer limit #{start}, #{offset}")
     List<Singer> getOnePageSinger(Integer start, Integer offset);
+
     @Select("select * from singer where f_py = #{f_py}")
     List<Singer> getOnePageSingerByPinYin(String f_py);
 

@@ -25,4 +25,7 @@ public interface SongMapper {
 
     @Select({"select * from song where song_id = #{song_id}"})
     Song getSongById(Integer song_id);
+
+    @Select({"select * from song where album_id = #{album_id}"})
+    List<Song> getSongByAlbumId(Integer album_id);
 }

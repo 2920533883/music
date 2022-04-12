@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 
 // 专辑实体
@@ -23,8 +22,5 @@ public class Album implements Serializable {
     String album_publish_time;
     @TableField(typeHandler = List2VarcharHandler.class)
     String singer_list;
-    @TableField(typeHandler = List2VarcharHandler.class)
-    String song_list;
     Integer click_num;
-    Integer share_num;
 }

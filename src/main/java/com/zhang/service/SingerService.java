@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.zhang.bean.Album;
 import com.zhang.bean.Singer;
-import com.zhang.bean.Song;
 import com.zhang.mapper.AlbumMapper;
 import com.zhang.mapper.SingerMapper;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,7 @@ public class SingerService {
     }
 
     public List<Singer> getSingerByNameFuzzily(String singer_name, Integer start, Integer offset){
-        return singerMapper.getOnePageSingerByNameFuzzily("*"+singer_name+"*", start, offset);
+        return singerMapper.getOnePageSingerByNameFuzzily("$"+singer_name+"$", start, offset);
     }
 
     public HashMap<String, Object> getSingerDetail(Integer singer_id){
@@ -45,12 +43,10 @@ public class SingerService {
         ArrayList<Album> albumList = new ArrayList<>();
         for (Object o : array) {
             Album album = albumMapper.getAlbumById(Integer.parseInt(o.toString()));
-            albumList.add(album);
+            if (album != null) albumList.add(album);
         }
         res.put("singer", singer);
         res.put("album", albumList);
         return res;
     }
-
-
 }

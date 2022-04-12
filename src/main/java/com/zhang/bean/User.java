@@ -22,20 +22,11 @@ public class User implements Serializable {
     String name;
     String username;
     String password;
-    Integer profession;
+    String profession;
     String create_time;
     String icon_url;
     String birthday;
-    String address;
     Integer gender;
     @TableField(typeHandler = List2VarcharHandler.class)
-    List<String> love_song;
-    @TableField(typeHandler = List2VarcharHandler.class)
     List<String> love_tag;
-    @TableField(typeHandler = List2VarcharHandler.class)
-    List<String> following;
-    @TableField(typeHandler = List2VarcharHandler.class)
-    List<String> follower;
-    @TableField(typeHandler = List2VarcharHandler.class)
-    List<String> play_history;
 }

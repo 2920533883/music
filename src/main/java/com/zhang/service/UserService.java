@@ -3,8 +3,7 @@ package com.zhang.service;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.zhang.bean.*;
-import com.zhang.mapper.TagMapper;
-import com.zhang.mapper.UserMapper;
+import com.zhang.mapper.*;
 import com.zhang.util.JwtUtil;
 import com.zhang.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +28,15 @@ public class UserService {
 
     @Resource
     TagMapper tagMapper;
+
+    @Resource
+    FollowMapper followMapper;
+
+    @Resource
+    PlayMapper playMapper;
+
+    @Resource
+    SongMapper songMapper;
     @Value("${aliyun.oss.endpoint}")
     private String ALIYUN_OSS_ENDPOINT;
     @Value("${aliyun.oss.accessKeyId}")
@@ -77,16 +85,18 @@ public class UserService {
     public Map<String, Object> selectUserByID(String id) {
         Map<String, Object> res = new HashMap<>();
         User user = userMapper.selectUserByID(id);
-        List<String> followerList = user.getFollower();
+        // 关注我的
+        List<Follow> followerList = followMapper.getFollower(user.getUser_id());
         List<User> resFollower = new ArrayList<>();
         followerList.forEach(follower->{
-            User simpleInfo = userMapper.getSimpleInfo(follower);
+            User simpleInfo = userMapper.getSimpleInfo(follower.getUser_id());
             resFollower.add(simpleInfo);
         });
-        List<String> followingList = user.getFollowing();
+        // 我关注的
+        List<Follow> followingList = followMapper.getFollowing(user.getUser_id());
         List<User> resFollowing = new ArrayList<>();
         followingList.forEach(following->{
-            User simpleInfo = userMapper.getSimpleInfo(following);
+            User simpleInfo = userMapper.getSimpleInfo(following.getFollowing());
             resFollowing.add(simpleInfo);
         });
         List<String> tagList = user.getLove_tag();
@@ -126,7 +136,6 @@ public class UserService {
             user.setPassword(SecurityUtil.getSHA256(user.getPassword()));
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             user.setCreate_time(sdf.format(new Date()));
-            user.setIcon_url("https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png");
             userMapper.insertUser(user);
             response = new R(200, AuthConstant.SUCCESS, user);
         } else {
@@ -148,7 +157,7 @@ public class UserService {
                 expireTime.setTime(setTime.getTime() + AuthConstant.EXPIRE_TIME);
                 String token = JwtUtil.sign(checkUser, expireTime);
                 JwtUtil.editCookieToken(response, token);
-                User simpleInfo = userMapper.getSimpleInfo(checkUser.getUser_id().toString());
+                User simpleInfo = userMapper.getSimpleInfo(checkUser.getUser_id());
                 resp = new R(200, AuthConstant.SUCCESS, simpleInfo);
             } else {
                 resp = new R(400, AuthConstant.WRONG_PASSWORD, null);
@@ -158,4 +167,6 @@ public class UserService {
         }
         return resp;
     }
+
+
 }
