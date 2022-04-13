@@ -18,14 +18,12 @@ public class SongController {
 
 
     /**
-     * 获取一页歌曲
-     * @param start 页数
-     * @param offset 每页数量
+     * 获取热门歌曲
      * @return R
      */
-    @GetMapping("/song")
-    public R getOnePageSong(@RequestParam Integer start, @RequestParam Integer offset){
-        List<Song> SongList = songService.getOnePageSong(start, offset);
+    @GetMapping("/hotSong")
+    public R getHotSong(){
+        List<Song> SongList = songService.getHotSong();
         return new R(200, AuthConstant.SUCCESS, SongList);
     }
 
@@ -44,13 +42,11 @@ public class SongController {
     /**
      * 模糊搜索
      * @param name 歌名
-     * @param start 页数
-     * @param offset 每页数量
      * @return R
      */
-    @GetMapping("/songByName/{name}")
-    public R getOnePageSongByName(@PathVariable String name, @RequestParam Integer start, @RequestParam Integer offset){
-        List<Song> SongList = songService.getOnePageSongByName(start, offset, name);
+    @GetMapping("/search/song/{name}")
+    public R getOnePageSongByName(@PathVariable String name){
+        List<Song> SongList = songService.getSongByName(name);
         return new R(200, AuthConstant.SUCCESS, SongList);
     }
 
@@ -78,13 +74,13 @@ public class SongController {
 
     /**
      * 取消收藏歌曲
-     * @param userId 用户ID
-     * @param songId 歌曲ID
+     * @param user_id 用户ID
+     * @param song_id 歌曲ID
      * @return R
      */
-    @DeleteMapping("/loveSong/{userId}/{songId}")
-    public R getLoveSong(@PathVariable Integer userId, @PathVariable Integer songId){
-        songService.deleteLoveSong(userId, songId);
+    @DeleteMapping("/unLoveSong")
+    public R unLoveSong(@RequestParam("user_id") Integer user_id, @RequestParam("song_id") Integer song_id){
+        songService.deleteLoveSong(user_id, song_id);
         return new R(200, AuthConstant.SUCCESS, null);
     }
 

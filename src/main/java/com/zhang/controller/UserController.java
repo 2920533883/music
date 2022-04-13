@@ -2,6 +2,7 @@ package com.zhang.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zhang.bean.AuthConstant;
+import com.zhang.bean.Follow;
 import com.zhang.bean.R;
 import com.zhang.bean.User;
 import com.zhang.service.UserService;
@@ -101,8 +102,8 @@ public class UserController {
      * @param name 用户名
      * @return R
      */
-    @GetMapping("/useru/fuzzily")
-    public R getUserByUsernameFuzzily(@RequestParam("name") String name) {
+    @GetMapping("/search/user/{name}")
+    public R getUserByUsernameFuzzily(@PathVariable String name) {
         return new R(200, "获取成功！", userService.selectUserByNameFuzzily(name));
     }
 
@@ -150,5 +151,22 @@ public class UserController {
     @PostMapping("/user/icon/{id}")
     public R updateIconById(@RequestParam("file") MultipartFile file, @PathVariable String id) throws IOException {
         return new R(200, AuthConstant.SUCCESS, userService.uploadIcon(file, id));
+    }
+
+    @PostMapping("/follow")
+    public R follow(@RequestParam("user_id") Integer user_id, @RequestParam("following") Integer following){
+        if (userService.follow(user_id, following)) return new R(200, AuthConstant.SUCCESS, null);
+        else return new R(400, AuthConstant.ERROR, null);
+    }
+
+    @DeleteMapping("/unFollow")
+    public R unFollow(@RequestParam("user_id") Integer user_id, @RequestParam("following") Integer following){
+        userService.unFollow(user_id, following);
+        return new R(200, AuthConstant.SUCCESS, null);
+    }
+
+    @GetMapping("/checkFollow")
+    public R checkFollow(@RequestParam("user_id") Integer user_id, @RequestParam("following") Integer following){
+        return new R(200, AuthConstant.SUCCESS, userService.getFollow(user_id, following));
     }
 }

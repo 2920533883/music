@@ -11,7 +11,7 @@ import java.util.List;
 public interface PlayMapper {
 
     @Select("select * from play where user_id = #{user_id} order by play_num desc limit 0, 20")
-    List<Play> getPlay(Integer user_id);
+    List<Play> getPlayHistory(Integer user_id);
 
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into play value (null, #{user_id}, #{song_id}, 1)")

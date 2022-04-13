@@ -42,13 +42,11 @@ public class SingerController {
     /**
      * 模糊搜索歌手
      * @param name 歌手名
-     * @param start 页数
-     * @param offset 每页数量
      * @return R
      */
-    @GetMapping("/singer/search/{name}")
-    public R getSingerByName(@PathVariable String name, @RequestParam Integer start, @RequestParam Integer offset){
-        return  new R(200, AuthConstant.SUCCESS, singerService.getSingerByNameFuzzily(name, start, offset));
+    @GetMapping("/search/singer/{name}")
+    public R getSingerByName(@PathVariable String name){
+        return  new R(200, AuthConstant.SUCCESS, singerService.getSingerByNameFuzzily(name));
     }
 
     /**

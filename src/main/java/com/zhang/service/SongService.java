@@ -32,8 +32,8 @@ public class SongService {
     @Resource
     LoveMapper loveMapper;
 
-    public List<Song> getOnePageSong(Integer start, Integer offset) {
-        return songMapper.getOnePageSong(start, offset);
+    public List<Song> getHotSong() {
+        return songMapper.getHotSong();
     }
 
     public Map<String, Object> getOnePageSongByTag(Integer start, Integer offset, String tag) {
@@ -45,8 +45,8 @@ public class SongService {
         return res;
     }
 
-    public List<Song> getOnePageSongByName(Integer start, Integer offset, String name) {
-        return songMapper.getOnePageSongByName(start, offset, "%" + name + "%");
+    public List<Song> getSongByName(String name) {
+        return songMapper.getSongByName("%" + name + "%");
     }
 
     public boolean loveSong(Integer userId, Integer songId) {
@@ -59,6 +59,10 @@ public class SongService {
         love.setCreate_time(sdf.format(new Date()));
         loveMapper.insertLove(love);
         return true;
+    }
+
+    public void unLoveSong(Integer userId, Integer songId){
+        loveMapper.deleteLove(userId, songId);
     }
 
     public Map<String, Object> getLoveSong(Integer userId, Integer start, Integer offset) {
@@ -85,7 +89,7 @@ public class SongService {
 
     public Map<String, Object> getPlayHistory(Integer user_id) {
         Map<String, Object> res = new HashMap<>();
-        List<Play> playList = playMapper.getPlay(user_id);
+        List<Play> playList = playMapper.getPlayHistory(user_id);
         res.put("play", playList);
         List<Song> songList = new ArrayList<>();
         for (Play play : playList) {

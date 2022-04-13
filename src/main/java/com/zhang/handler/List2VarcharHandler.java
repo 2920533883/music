@@ -40,7 +40,7 @@ public class List2VarcharHandler implements TypeHandler<List<String>> {
             return null;
         else {
             System.out.println(parameter.toString());
-            return parameter.toString();
+            return parameter.toString().replace(" ", "");
         }
     }
 
@@ -49,7 +49,7 @@ public class List2VarcharHandler implements TypeHandler<List<String>> {
         if (StringUtil.isBlank(rs.getString(columnName))) {
             return new ArrayList<>();
         }
-        return Arrays.asList(rs.getString(columnName).replace("[", "").replace("]", "").replace("\"", "").split(","));
+        return Arrays.asList(rs.getString(columnName).replace("[", "").replace("]", "").replace("\"", "").replace(" ", "").split(","));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class List2VarcharHandler implements TypeHandler<List<String>> {
         if (StringUtil.isBlank(rs.getString(columnIndex))) {
             return new ArrayList<>();
         }
-        return Arrays.asList(rs.getRowId(columnIndex).toString().replace("[", "").replace("]", "").replace("\"", "").split(","));
+        return Arrays.asList(rs.getRowId(columnIndex).toString().replace("[", "").replace("]", "").replace("\"", "").replace(" ", "").split(","));
     }
 
 
@@ -67,6 +67,6 @@ public class List2VarcharHandler implements TypeHandler<List<String>> {
         if (StringUtil.isBlank(text)) {
             return new ArrayList<>();
         }
-        return Arrays.asList(cs.getRowId(columnIndex).toString().replace("[", "").replace("]", "").replace("\"", "").split(","));
+        return Arrays.asList(cs.getRowId(columnIndex).toString().replace("[", "").replace("]", "").replace("\"", "").replace(" ", "").split(","));
     }
 }

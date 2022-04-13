@@ -21,13 +21,11 @@ public class AlbumController {
     /**
      * 模糊搜索专辑
      * @param name 专辑名
-     * @param start 页数
-     * @param offset 每页数量
      * @return R
      */
     @GetMapping("/search/album/{name}")
-    public R getAlbumByName(@PathVariable String name, @RequestParam Integer start, @RequestParam Integer offset){
-        return new R(200, AuthConstant.SUCCESS, albumService.getAlbumByName(name, start, offset));
+    public R getAlbumByName(@PathVariable String name){
+        return new R(200, AuthConstant.SUCCESS, albumService.getAlbumByName(name));
     }
 
     /**

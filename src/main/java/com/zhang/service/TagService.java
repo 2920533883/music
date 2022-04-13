@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
@@ -35,6 +32,16 @@ public class TagService {
             fMap.put("label", fTag.getTag_name());
             fMap.put("children", children);
             res.add(fMap);
+        });
+        return res;
+    }
+
+    public Set<Tag> getChildrenTag() {
+        List<Tag> fTagList = tagMapper.getTagsByFid(0);
+        Set<Tag> res = new HashSet<>();
+        fTagList.forEach(fTag -> {
+            List<Tag> cTagList = tagMapper.getTagsByFid(fTag.getTag_id());
+            res.addAll(cTagList);
         });
         return res;
     }

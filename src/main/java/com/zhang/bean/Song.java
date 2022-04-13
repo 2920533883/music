@@ -23,7 +23,7 @@ public class Song implements Serializable {
     Integer song_time;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> singer_list;
-    List<String> album_name;
+    String album_name;
     Integer album_id;
     @TableField(typeHandler = List2VarcharHandler.class)
     List<String> song_tag;

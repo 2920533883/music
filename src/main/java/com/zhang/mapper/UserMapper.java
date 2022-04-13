@@ -13,7 +13,7 @@ public interface UserMapper {
     void updateIcon(String icon_url, String user_id);
 
     // 更新用户信息
-    @Update({"update user set name=#{name}, profession=#{profession}, birthday=#{birthday}, gender=#{gender} where user_id=#{user_id}"})
+    @Update({"update user set name=#{name}, profession=#{profession}, birthday=#{birthday}, gender=#{gender}, love_tag=#{love_tag} where user_id=#{user_id}"})
     void updateUserInfo(User user);
 
     // 更新密码
@@ -43,15 +43,9 @@ public interface UserMapper {
     @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, null, #{create_time}, 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png', '[]', '[]', '[]', '[]', null, -1, '[]')"})
     void insertUser(User user);
 
-    // 获取用户收藏歌曲
-    @Select("select love_song from user where user_id = #{user_id}")
-    String getLoveSongByUserId(Integer user_id);
 
     // 获取用户简易信息
     @Select("select user_id, name, icon_url from user where user_id = #{user_id}")
     User getSimpleInfo(Integer user_id);
 
-    // 更新收藏歌曲
-    @Update("update user set love_song = #{love_song} where user_id = #{user_id}")
-    void updateLoveSongByUserId(Integer user_id, String love_song);
 }

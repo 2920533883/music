@@ -31,13 +31,15 @@ public class AlbumService {
         return albumMapper.getAlbumBySingerId("%\"" + singer_id + "\"%", start, offset);
     }
 
-    public List<Album> getAlbumByName(String name, Integer start, Integer offset) {
-        return albumMapper.getOnePageAlbumByNameFuzzily("%" + name + "%", start, offset);
+    public List<Album> getAlbumByName(String name) {
+        return albumMapper.getAlbumByNameFuzzily("%" + name + "%");
     }
 
     public Map<String,Object> getAlbumById(Integer album_id){
         Map<String,Object> res = new HashMap<>();
         Album album = albumMapper.getAlbumById(album_id);
+        if (album == null) return null;
+        albumMapper.addClickNum();
         JSONArray array = JSON.parseArray(album.getSinger_list());
         List<Singer> resSingerList = new ArrayList<>();
         for (Object o : array) {

@@ -2,7 +2,10 @@ package com.zhang.service;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
-import com.zhang.bean.*;
+import com.zhang.bean.AuthConstant;
+import com.zhang.bean.Follow;
+import com.zhang.bean.R;
+import com.zhang.bean.User;
 import com.zhang.mapper.*;
 import com.zhang.util.JwtUtil;
 import com.zhang.util.SecurityUtil;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -63,21 +67,21 @@ public class UserService {
         userMapper.updateUserInfo(user);
     }
 
-    public R updateUserPassword(String username, String oldpassword,String newpassword, ServletResponse response) {
+    public R updateUserPassword(String username, String oldpassword, String newpassword, ServletResponse response) {
         User user = userMapper.selectUserByUsername(username);
-        if (SecurityUtil.getSHA256(oldpassword).equals(user.getPassword())){
+        if (SecurityUtil.getSHA256(oldpassword).equals(user.getPassword())) {
             deleteToken(user);
             JwtUtil.editCookieToken(response, "");
             userMapper.updateUserPassword(username, SecurityUtil.getSHA256(newpassword));
-            return  new R(200, AuthConstant.SUCCESS, null);
-        }
-        else return new R(400, AuthConstant.WRONG_PASSWORD, null);
+            return new R(200, AuthConstant.SUCCESS, null);
+        } else return new R(400, AuthConstant.WRONG_PASSWORD, null);
     }
 
     public User selectUserByToken(String token) {
         final String username = JwtUtil.getUsername(token);
         return userMapper.selectUserByUsername(username);
     }
+
     public User selectUserByUsername(String username) {
         return userMapper.selectUserByUsername(username);
     }
@@ -85,26 +89,22 @@ public class UserService {
     public Map<String, Object> selectUserByID(String id) {
         Map<String, Object> res = new HashMap<>();
         User user = userMapper.selectUserByID(id);
+        if (user == null) return null;
         // 关注我的
         List<Follow> followerList = followMapper.getFollower(user.getUser_id());
         List<User> resFollower = new ArrayList<>();
-        followerList.forEach(follower->{
+        followerList.forEach(follower -> {
             User simpleInfo = userMapper.getSimpleInfo(follower.getUser_id());
             resFollower.add(simpleInfo);
         });
         // 我关注的
         List<Follow> followingList = followMapper.getFollowing(user.getUser_id());
         List<User> resFollowing = new ArrayList<>();
-        followingList.forEach(following->{
+        followingList.forEach(following -> {
             User simpleInfo = userMapper.getSimpleInfo(following.getFollowing());
             resFollowing.add(simpleInfo);
         });
-        List<String> tagList = user.getLove_tag();
-        List<Tag> resTag = new ArrayList<>();
-        tagList.forEach(tag->{
-            Tag tagByID = tagMapper.getTagsByID(tag);
-            resTag.add(tagByID);
-        });
+        List<String> resTag = user.getLove_tag();
         res.put("user", user);
         res.put("follower", resFollower);
         res.put("following", resFollowing);
@@ -113,7 +113,7 @@ public class UserService {
     }
 
     public List<User> selectUserByNameFuzzily(String name) {
-        return userMapper.selectUserByNameFuzzily("%"+name+"%");
+        return userMapper.selectUserByNameFuzzily("%" + name + "%");
     }
 
     public List<User> selectAllUser() {
@@ -134,7 +134,7 @@ public class UserService {
         User checkUser = userMapper.selectUserByUsername(user.getUsername());
         if (checkUser == null) { //用户名未注册
             user.setPassword(SecurityUtil.getSHA256(user.getPassword()));
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             user.setCreate_time(sdf.format(new Date()));
             userMapper.insertUser(user);
             response = new R(200, AuthConstant.SUCCESS, user);
@@ -143,10 +143,12 @@ public class UserService {
         }
         return response;
     }
+
     public void deleteToken(User user) {
         Date currentTime = new Date();
         JwtUtil.sign(user, currentTime);
     }
+
     public R login(User user, ServletResponse response) {
         R resp;
         User checkUser = userMapper.selectUserByUsername(user.getUsername());
@@ -168,5 +170,30 @@ public class UserService {
         return resp;
     }
 
+    public boolean follow(Integer user_id, Integer following) {
+        Follow follow = new Follow();
+        follow.setFollowing(following);
+        follow.setUser_id(user_id);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        follow.setCreate_time(sdf.format(new Date()));
+        if (followMapper.checkIfFollow(follow) == null) {
+            followMapper.insertFollow(follow);
+            return true;
+        }
+        return false;
+    }
 
+    public void unFollow(Integer user_id, Integer following) {
+        Follow follow = new Follow();
+        follow.setFollowing(following);
+        follow.setUser_id(user_id);
+        followMapper.deleteFollow(follow);
+    }
+
+    public Follow getFollow(Integer user_id, Integer following) {
+        Follow follow = new Follow();
+        follow.setFollowing(following);
+        follow.setUser_id(user_id);
+        return followMapper.checkIfFollow(follow);
+    }
 }

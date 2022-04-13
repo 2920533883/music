@@ -29,4 +29,9 @@ public class TagController {
     public R getAllTags(){
         return new R(200, AuthConstant.SUCCESS, tagService.getAllTag());
     }
+
+    @GetMapping("/childrenTag")
+    public R getChildrenTag(){
+        return new R(200, AuthConstant.SUCCESS, tagService.getChildrenTag());
+    }
 }

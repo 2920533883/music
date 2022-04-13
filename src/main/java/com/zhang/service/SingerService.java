@@ -24,21 +24,22 @@ public class SingerService {
     @Resource
     AlbumMapper albumMapper;
 
-    public List<Singer> getSinger(Integer start, Integer offset){
+    public List<Singer> getSinger(Integer start, Integer offset) {
         return singerMapper.getOnePageSinger(start, offset);
     }
 
-    public List<Singer> getSingerByPinYin(String f_py){
+    public List<Singer> getSingerByPinYin(String f_py) {
         return singerMapper.getOnePageSingerByPinYin(f_py);
     }
 
-    public List<Singer> getSingerByNameFuzzily(String singer_name, Integer start, Integer offset){
-        return singerMapper.getOnePageSingerByNameFuzzily("$"+singer_name+"$", start, offset);
+    public List<Singer> getSingerByNameFuzzily(String singer_name) {
+        return singerMapper.getOnePageSingerByNameFuzzily("%" + singer_name + "%");
     }
 
-    public HashMap<String, Object> getSingerDetail(Integer singer_id){
+    public HashMap<String, Object> getSingerDetail(Integer singer_id) {
         HashMap<String, Object> res = new HashMap<String, Object>();
         Singer singer = singerMapper.getSingerById(singer_id);
+        if (singer == null) return null;
         JSONArray array = JSON.parseArray(singer.getAlbum_list());
         ArrayList<Album> albumList = new ArrayList<>();
         for (Object o : array) {
