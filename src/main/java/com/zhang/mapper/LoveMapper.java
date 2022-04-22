@@ -16,6 +16,8 @@ public interface LoveMapper {
     @Select("select count(*) as total from love where user_id = #{user_id}")
     int getLoveTotal(Integer user_id);
 
+    @Select("select * from love")
+    List<Love> getAllLove();
 
     @Select("select * from love where user_id = #{user_id} and song_id = #{song_id}")
     Love checkIfLove(Integer user_id, Integer song_id);

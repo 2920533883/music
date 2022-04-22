@@ -22,7 +22,7 @@ jwt:
 
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
   type-handlers-package: com.zhang.handler
 

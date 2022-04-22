@@ -4,6 +4,7 @@ import com.zhang.bean.Song;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -28,4 +29,11 @@ public interface SongMapper {
 
     @Select({"select * from song where album_id = #{album_id}"})
     List<Song> getSongByAlbumId(Integer album_id);
+
+    @Update("update song set play_num = #{play_num} where song_id = #{song_id}")
+    void updatePlayNum(Integer song_id, Integer play_num);
+
+    @Update("update song set love_num = #{love_num} where song_id = #{song_id}")
+    void updateLoveNum(Integer song_id, Integer love_num);
+
 }

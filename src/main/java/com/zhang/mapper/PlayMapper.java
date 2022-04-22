@@ -13,7 +13,6 @@ public interface PlayMapper {
     @Select("select * from play where user_id = #{user_id} order by play_num desc limit 0, 20")
     List<Play> getPlayHistory(Integer user_id);
 
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into play value (null, #{user_id}, #{song_id}, 1)")
     void addPlayHistory(Integer user_id, Integer song_id);
 
@@ -22,4 +21,7 @@ public interface PlayMapper {
 
     @Update("update play set play_num = play_num+1 where user_id = #{user_id} and song_id = #{song_id}")
     void updatePlayHistory(Integer user_id, Integer song_id);
+
+    @Select("select * from play")
+    List<Play> getAllPlay();
 }

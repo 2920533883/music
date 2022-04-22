@@ -22,7 +22,7 @@ public interface AlbumMapper {
     @Select("select count(*) as total from album where album_name = #{album_name}")
     int getAlbumByNameFuzzilyTotal(String album_name);
 
-    @Select("select * from album where singer_list like #{singer_id} limit #{start}, #{offset}")
+    @Select("select * from album where singer_list like #{singer_id} order by album_publish_time desc limit #{start}, #{offset}")
     List<Album> getAlbumBySingerId(String singer_id, Integer start, Integer offset);
 
     @Select("select count(*) as total from album where singer_list like #{singer_id}")
