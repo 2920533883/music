@@ -86,7 +86,7 @@ public class UserService {
         return userMapper.selectUserByUsername(username);
     }
 
-    public Map<String, Object> selectUserByID(String id) {
+    public Map<String, Object> selectUserByID(Integer id) {
         Map<String, Object> res = new HashMap<>();
         User user = userMapper.selectUserByID(id);
         if (user == null) return null;

@@ -91,7 +91,7 @@ public class UserController {
      * @return R
      */
     @GetMapping("/useri")
-    public R getUserByID(@RequestParam("id") String id) {
+    public R getUserByID(@RequestParam("id") Integer id) {
         return new R(200, "获取成功！", userService.selectUserByID(id));
     }
 

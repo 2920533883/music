@@ -27,7 +27,7 @@ public interface UserMapper {
 
     // 按用户ID精确查询用户
     @Select({"SELECT * FROM `user` WHERE `user_id` = #{user_id}"})
-    User selectUserByID(String user_id);
+    User selectUserByID(Integer user_id);
 
 
     // 按昵称模糊查询用户
@@ -40,7 +40,7 @@ public interface UserMapper {
 
     // 插入用户
     @Options(useGeneratedKeys = true, keyProperty = "user_id", keyColumn = "user_id")
-    @Insert({"insert into user values(#{user_id}, #{name}, #{username}, #{password}, null, #{create_time}, 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png', '[]', '[]', '[]', '[]', null, -1, '[]')"})
+    @Insert({"insert into user values(null, #{name}, #{username}, #{password}, null, #{create_time}, 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png', null, -1, '[]')"})
     void insertUser(User user);
 
 
