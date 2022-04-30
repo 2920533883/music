@@ -36,4 +36,7 @@ public interface SongMapper {
     @Update("update song set love_num = #{love_num} where song_id = #{song_id}")
     void updateLoveNum(Integer song_id, Integer love_num);
 
+    @Select("SELECT * FROM zs_music.song AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(song_id) FROM zs_music.song)) AS song_id) AS t2 WHERE t1.song_id >= t2.song_id ORDER BY t1.song_id ASC LIMIT 1000")
+    List<Song> getRandomSong();
+
 }

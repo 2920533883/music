@@ -1,12 +1,14 @@
 package com.zhang.controller;
 
-import com.zhang.bean.AuthConstant;
-import com.zhang.bean.R;
-import com.zhang.bean.Song;
+import com.zhang.bean.*;
+import com.zhang.mapper.LoveMapper;
+import com.zhang.mapper.PlayMapper;
+import com.zhang.mapper.SongMapper;
 import com.zhang.service.SongService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,9 +26,8 @@ public class SongController {
      * @return R
      */
     @GetMapping("/hotSong")
-    public R getHotSong() {
-        List<Song> SongList = songService.getHotSong();
-        return new R(200, AuthConstant.SUCCESS, SongList);
+    public R getHotSong(@RequestParam(value = "userId", required = false) Integer userId) {
+        return new R(200, AuthConstant.SUCCESS, songService.getHotSong(userId));
     }
 
     /**
@@ -38,8 +39,8 @@ public class SongController {
      * @return R
      */
     @GetMapping("/songByTag/{tag}")
-    public R getOnePageSongByTag(@PathVariable String tag, @RequestParam Integer start, @RequestParam Integer offset) {
-        return new R(200, AuthConstant.SUCCESS, songService.getOnePageSongByTag(start, offset, tag));
+    public R getOnePageSongByTag(@PathVariable String tag, @RequestParam Integer start, @RequestParam Integer offset,@RequestParam(required = false) Integer userId) {
+        return new R(200, AuthConstant.SUCCESS, songService.getOnePageSongByTag(start, offset, tag, userId));
     }
 
     /**
@@ -49,8 +50,8 @@ public class SongController {
      * @return R
      */
     @GetMapping("/search/song/{name}")
-    public R getOnePageSongByName(@PathVariable String name) {
-        List<Song> SongList = songService.getSongByName(name);
+    public R getOnePageSongByName(@PathVariable String name, @RequestParam(required = false) Integer userId) {
+        List<Song> SongList = songService.getSongByName(name, userId);
         return new R(200, AuthConstant.SUCCESS, SongList);
     }
 
@@ -98,8 +99,8 @@ public class SongController {
      * @return R
      */
     @GetMapping("/song/album/{albumId}")
-    public R getAlbumSong(@PathVariable Integer albumId) {
-        return new R(200, AuthConstant.SUCCESS, songService.getSongByAlbum(albumId));
+    public R getAlbumSong(@PathVariable Integer albumId, @RequestParam(value = "userId", required = false) Integer userId) {
+        return new R(200, AuthConstant.SUCCESS, songService.getSongByAlbum(albumId, userId));
     }
 
     @GetMapping("/playHistory/{user_id}")
@@ -116,5 +117,45 @@ public class SongController {
     @GetMapping("/recommend/{user_id}")
     public R getRecommend(@PathVariable Integer user_id) throws Exception {
         return new R(200, AuthConstant.SUCCESS, songService.getRecommend(user_id));
+    }
+
+    @Resource
+    PlayMapper playMapper;
+    @Resource
+    SongMapper songMapper;
+    @Resource
+    LoveMapper loveMapper;
+    @GetMapping("/a")
+    public void calculatePlayLoveNum(){
+        HashMap<Integer, Integer> playMap = new HashMap<>();
+        List<Play> allPlay = playMapper.getAllPlay();
+        for (Play play : allPlay) {
+            Integer song_id = play.getSong_id();
+            Integer play_num = play.getPlay_num();
+            if (playMap.containsKey(song_id)){
+                playMap.put(song_id, playMap.get(song_id) + play_num);
+            }
+            else {
+                playMap.put(song_id, play_num);
+            }
+        }
+        playMap.forEach((song_id, play_num) -> {
+            songMapper.updatePlayNum(song_id, play_num);
+
+        });
+        HashMap<Integer, Integer> loveMap = new HashMap<>();
+        List<Love> allLove = loveMapper.getAllLove();
+        for (Love love : allLove) {
+            Integer song_id = love.getSong_id();
+            if (loveMap.containsKey(song_id)){
+                loveMap.put(song_id, loveMap.get(song_id) + 1);
+            }
+            else {
+                loveMap.put(song_id, 1);
+            }
+        }
+        loveMap.forEach((song_id, love_num) -> {
+            songMapper.updateLoveNum(song_id, love_num);
+        });
     }
 }

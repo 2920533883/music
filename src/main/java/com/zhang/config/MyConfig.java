@@ -1,6 +1,11 @@
 package com.zhang.config;
 
+import com.zhang.bean.Song;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 注册自定义容器
@@ -43,14 +48,4 @@ public class MyConfig {
 //        return authMap;
 //    }
 //
-//    @Bean("HotClickMap")
-//    public HashMap<String, Integer> getHotClickMap() throws Exception {
-//        BufferedReader br = new BufferedReader(new FileReader(filePath+"hotClick.txt"));
-//        String line;
-//        while ((line = br.readLine()) != null){
-//            String[] s = line.split(" ");
-//            hotClickMap.put(s[0], Integer.valueOf(s[1]));
-//        }
-//        return hotClickMap;
-//    }
 }

@@ -29,4 +29,5 @@ public class Song implements Serializable {
     List<String> song_tag;
     Integer play_num;
     Integer love_num;
+    Boolean isLove = false;
 }

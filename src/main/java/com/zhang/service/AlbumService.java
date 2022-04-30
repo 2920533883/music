@@ -6,6 +6,7 @@ import com.zhang.bean.Album;
 import com.zhang.bean.Singer;
 import com.zhang.bean.Song;
 import com.zhang.mapper.AlbumMapper;
+import com.zhang.mapper.LoveMapper;
 import com.zhang.mapper.SingerMapper;
 import com.zhang.mapper.SongMapper;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,9 @@ public class AlbumService {
         return albumMapper.getAlbumByNameFuzzily("%" + name + "%");
     }
 
-    public Map<String,Object> getAlbumById(Integer album_id){
+    @Resource
+    LoveMapper loveMapper;
+    public Map<String,Object> getAlbumById(Integer album_id, Integer user_id){
         Map<String,Object> res = new HashMap<>();
         Album album = albumMapper.getAlbumById(album_id);
         if (album == null) return null;
@@ -47,6 +50,11 @@ public class AlbumService {
             resSingerList.add(singer);
         }
         List<Song> resSongList = songMapper.getSongByAlbumId(album_id);
+        if (user_id != null){
+            for (Song song : resSongList) {
+                if (loveMapper.checkIfLove(user_id, song.getSong_id()) != null) song.setIsLove(true);
+            }
+        }
         res.put("album", album);
         res.put("singer", resSingerList);
         res.put("song", resSongList);

@@ -34,8 +34,8 @@ public class AlbumController {
      * @return R
      */
     @GetMapping("/album/detail/{albumId}")
-    public R getAlbumById(@PathVariable Integer albumId){
-        return new R(200, AuthConstant.SUCCESS, albumService.getAlbumById(albumId));
+    public R getAlbumById(@PathVariable Integer albumId, @RequestParam(value = "userId", required = false) Integer userId){
+        return new R(200, AuthConstant.SUCCESS, albumService.getAlbumById(albumId, userId));
     }
 
 }
